@@ -9,15 +9,34 @@
 import UIKit
 
 class ViewController: UIViewController {
-    @IBOutlet weak var CityLabel: UITextField!
-    @IBOutlet weak var CurrentWeatherLabel: UILabel!
-    @IBOutlet weak var CurrentTemperatureLabel: UILabel!
+    
+    @IBOutlet weak var cityLabel: UITextField!
+    @IBOutlet weak var currentWeatherLabel: UILabel!
+    @IBOutlet weak var currentTemperatureLabel: UILabel!
+    @IBOutlet weak var stateAbbreviationInput: UITextField!
+    @IBOutlet weak var cityNameInput: UITextField!
+    
+    var weatherWearService: WeatherService = WundergroundWeatherService()
+    
     @IBAction func GetWeather(_ sender: Any) {
-        CurrentWeatherLabel.backgroundColor = UIColor.purple
+        
+        // TODO: take the argument values from the state and city input boxes
+        weatherWearService.getForecast("Geneva", "IL") { (weatherForecast, error) in
+            if error != nil {
+                // Deal with error here
+                return
+            } else if let weatherForecast = weatherForecast {
+               self.currentWeatherLabel.text = weatherForecast.forecast?.txtForecast?.forecastDays?[0].fctText
+            }
+            else {
+                // Deal with no error, no forecast!
+                
+            }
+        }
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        CityLabel.text = "St. Charles, IL"
+        cityLabel.text = "St. Charles, IL"
         // Do any additional setup after loading the view, typically from a nib.
     }
 
