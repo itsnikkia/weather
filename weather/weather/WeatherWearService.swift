@@ -34,6 +34,7 @@ class WundergroundWeatherService: NSObject, WeatherService, URLSessionDelegate {
         
         // Example API Request: http://api.wunderground.com/api/ad6fae97afface29/forecast/q/CA/San_Francisco.json
         let weatherUndergroundForecastURL =  "\(weatherUndergroundBaseAddress)\(weatherUndergroundKey)/forecast/q/\(state)/\(city).json"
+        // investigate error happening on next line with unwrapping
         let components = URLComponents(string: weatherUndergroundForecastURL)!
         guard let url = components.url else {return}
         
@@ -80,11 +81,13 @@ class WundergroundWeatherService: NSObject, WeatherService, URLSessionDelegate {
                 // For our purposes, we will only look at the first forcast day in the array
                 let currentForecast = forecastDays[0] as? [String: Any],
                 // Let's atart by only getting one property value from forecast day and add more later
-                let currentForecastText = currentForecast["fcttext"] as? String
+                let currentForecastText = currentForecast["fcttext"] as? String,
+                let currentForecastIcon = currentForecast["icon_url"] as? String
             {
                 // Build the WeatherForecast Object instance from the inside out
                 let txtForecastDay = TxtForecastDay()
                 txtForecastDay.fctText = currentForecastText
+                txtForecastDay.iconUrl = URL(string: currentForecastIcon)
                 
                 let txtForecast = TxtForecast()
                 txtForecast.forecastDate = forecastDate
