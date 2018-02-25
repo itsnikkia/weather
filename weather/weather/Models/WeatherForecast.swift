@@ -1,6 +1,6 @@
 //
 //  WeatherForecast.swift
-//  weather: model for the WeatherForecast returned from Wunderground API
+//  weather: data model for the WeatherForecast returned from Wunderground API
 //  API call example: http://api.wunderground.com/api/ad6fae97afface29/forecast/q/IL/Geneva.json
 //
 //  Created by Dorothy Lee on 2/21/18.
@@ -9,113 +9,114 @@
 
 import Foundation
 
-class WeatherForecast {
-    var response: Response? = nil
-    var forecast: Forecast? = nil
-}
+// WeatherForecast Class models the top-level object returned as JSON from the forecast API Call;
+// It contains 2 nested objects (response and forecast), which in turn each contain several layers of nesting.
+// Each class implements the Codable Protocol to allow the JSONDecoder to map the JSON response directly to a WeatherForecast instance
+// Using property names that are an exact match in spelling and case to the field names in the JSON allows use of the default decoder to greatly simplify the coding:
+//  let webForecast = try decoder.decode(WeatherForecast.self, from: data)
 
-class Response  {
-    let version: String? = nil
-    let termsofService: String? = nil
-    let features: Feature? = nil
-}
-class Feature  {
-    var forecast: Int? = nil
-}
-
-class Forecast  {
-    var txtForecast: TxtForecast? = nil
-    var simpleForecast: SimpleForecast? = nil
-}
-
-class TxtForecast {
-    var forecastDate: String? = nil
-    var forecastDays: [TxtForecastDay]? = nil
+class WeatherForecast: Codable {
     
+    let response: Response?
+    let forecast: Forecast?
 }
 
-class TxtForecastDay  {
-    var period: Int? = nil
-    var icon: String? = nil
-    var iconUrl: URL? = nil
-    var title: String? = nil
-    var fctText: String? = nil
-    var fctTextMetric: String? = nil
-    var pop: String? = nil
-   
+class Response: Codable {
+    let version: String?
+    let termsofService: String?
+    let features: Feature?
 }
 
-class SimpleForecast {
-    let forecastDay: [ForecastDay]? = nil
+class Feature: Codable {
+    let forecast: Int?
 }
 
-class ForecastDay {
-    let date: ForecastDate? = nil
-    let period: Int? = nil
-    let high: FarenheitCelsius? = nil
-    let low: FarenheitCelsius? = nil
-    let conditions: String? = nil
-    let icon: String? = nil
-    let icon_url: URL? = nil
-    let skyicon: String? = nil
-    let pop: Int? = nil
-    let qpf_allday: InchesMillimeters? = nil
-    let qpf_day: InchesMillimeters? = nil
-    let qpf_night: InchesMillimeters? = nil
-    let snow_allday: InchesCentimeters? = nil
-    let snow_day: InchesCentimeters? = nil
-    let snow_night: InchesCentimeters? = nil
-    let maxwind: WindDescription? = nil
-    let avewind: WindDescription? = nil
-    let avehumidity: Int? = nil
-    let maxhumidity: Int? = nil
-    let minhumidity: Int? = nil
-   
-    
+class Forecast: Codable {
+    let txt_forecast: TxtForecast?
+    let simpleforecast: SimpleForecast?
 }
 
-class ForecastDate  {
-    let epoch: String? = nil
-    let pretty: String? = nil
-    let day: Int? = nil
-    let month: Int? = nil
-    let year: Int? = nil
-    let yday: Int? = nil
-    let hour: Int? = nil
-    let min: String? = nil
-    let sec: Int? = nil
-    let isdst: String? = nil
-    let monthname: String? = nil
-    let monthname_short: String? = nil
-    let weekday_short: String? = nil
-    let weekday: String? = nil
-    let ampm: String? = nil
-    let tz_short: String? = nil
-    let tz_long: String? = nil
-    
+class TxtForecast: Codable{
+    let date: String?
+    let forecastday: [TxtForecastDay]?
 }
 
-class FarenheitCelsius  {
-    let farhenheit: String? = nil
-    let celsius: String? = nil
+class TxtForecastDay: Codable {
+    let period: Int?
+    let icon: String?
+    let icon_url: URL?
+    let title: String?
+    let fcttext: String?
+    let fcttext_metric: String?
+    let pop: String?
 }
 
-class InchesCentimeters  {
-    let inches: Int? = nil
-    let centimeters: Int? = nil
-   
+class SimpleForecast: Codable{
+    let forecastday: [ForecastDay]?
 }
 
-class InchesMillimeters {
-    let inches: Int? = nil
-    let millimeters: Int? = nil
-   
+class ForecastDay: Codable {
+    let date: ForecastDate?
+    let period: Int?
+    let high: FahrenheitCelsius?
+    let low: FahrenheitCelsius?
+    let conditions: String?
+    let icon: String?
+    let icon_url: URL?
+    let skyicon: String?
+    let pop: Int?
+    let qpf_allday: InchesMillimeters?
+    let qpf_day: InchesMillimeters?
+    let qpf_night: InchesMillimeters?
+    let snow_allday: InchesCentimeters?
+    let snow_day: InchesCentimeters?
+    let snow_night: InchesCentimeters?
+    let maxwind: WindDescription?
+    let avewind: WindDescription?
+    let avehumidity: Int?
+    let maxhumidity: Int?
+    let minhumidity: Int?
 }
 
-class WindDescription {
-    let mph: Int? = nil
-    let kph: Int? = nil
-    let dir: String? = nil
-    let degrees: Int? = nil
+class ForecastDate: Codable {
+    let epoch: String?
+    let pretty: String?
+    let day: Int?
+    let month: Int?
+    let year: Int?
+    let yday: Int?
+    let hour: Int?
+    let min: String?
+    let sec: Int?
+    let isdst: String?
+    let monthname: String?
+    let monthname_short: String?
+    let weekday_short: String?
+    let weekday: String?
+    let ampm: String?
+    let tz_short: String?
+    let tz_long: String?
+}
+
+class FahrenheitCelsius: Codable {
+    let fahrenheit: String?
+    let celsius: String?
+}
+
+class InchesCentimeters: Codable {
+    let `in`: Float?  // 'in' is a reserved word in Swift, so needs to be surrounded by backticks
+    let cm: Float?
+}
+
+class InchesMillimeters: Codable {
+    let `in`: Float?
+    let mm: Float?
+}
+
+class WindDescription: Codable {
+    let mph: Int?
+    let kph: Int?
+    let dir: String?
+    let degrees: Int?
 }
 

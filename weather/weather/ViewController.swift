@@ -21,20 +21,26 @@ class ViewController: UIViewController {
     
     @IBAction func GetWeather(_ sender: Any) {
         
-        // take the argument values from the state and city input boxes
+        // TODO: validate the user input; we can do this after we add more to the UI...
+        
+        // Take the argument values from the state and city input boxes
+        // Multi-word city names need to have underscores between words
         let city = cityNameInput.text!.replacingOccurrences(of: " ", with: "_")
         let state = stateAbbreviationInput.text!
         
+        // Call the Weather Web API's Forecast
         weatherWearService.getForecast(city, state) { (weatherForecast, error) in
             if error != nil {
                 // Deal with error here
                 return
             } else if let weatherForecast = weatherForecast {
-               self.currentWeatherLabel.text = weatherForecast.forecast?.txtForecast?.forecastDays?[0].fctText
-                do {let data = try Data(contentsOf: (weatherForecast.forecast?.txtForecast?.forecastDays?[0].iconUrl)!)
-                self.weatherIcon.image = UIImage(data: data)
+                self.currentWeatherLabel.text = weatherForecast.forecast?.txt_forecast?.forecastday?[0].fcttext
+                // Getting the image from a URL requires converting the URL contents to a Data object
+                //  to use in initializing a UIImage
+                do {let data = try Data(contentsOf: (weatherForecast.forecast?.txt_forecast?.forecastday?[0].icon_url)!)
+                    self.weatherIcon.image = UIImage(data: data)
                 } catch {
-                
+                    // TODO: deal with error converting image from url
                 }
             }
             else {
@@ -48,12 +54,12 @@ class ViewController: UIViewController {
         cityLabel.text = "St. Charles, IL"
         // Do any additional setup after loading the view, typically from a nib.
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-
+    
+    
 }
 
