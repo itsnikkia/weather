@@ -15,6 +15,10 @@ class ViewController: UIViewController {
     @IBOutlet weak var currentTemperatureLabel: UILabel!
     @IBOutlet weak var stateAbbreviationInput: UITextField!
     @IBOutlet weak var cityNameInput: UITextField!
+    @IBOutlet weak var celsiusToggle: UISwitch!
+    @IBAction func toggleTemperature(_ sender: Any) {
+    }
+    @IBOutlet weak var celsiusLabel: UILabel!
     
     @IBOutlet weak var weatherIcon: UIImageView!
     var weatherWearService: WeatherService = WundergroundWeatherService()
@@ -35,6 +39,13 @@ class ViewController: UIViewController {
                 return
             } else if let weatherForecast = weatherForecast {
                 self.currentWeatherLabel.text = weatherForecast.forecast?.txt_forecast?.forecastday?[0].fcttext
+                if self.celsiusToggle.isOn {
+                    self.currentTemperatureLabel.text = weatherForecast.forecast?.simpleforecast?.forecastday?[0].high?.celsius
+                }
+                else {
+                    self.currentTemperatureLabel.text = weatherForecast.forecast?.simpleforecast?.forecastday?[0].high?.fahrenheit
+                }
+                
                 // Getting the image from a URL requires converting the URL contents to a Data object
                 //  to use in initializing a UIImage
                 do {let data = try Data(contentsOf: (weatherForecast.forecast?.txt_forecast?.forecastday?[0].icon_url)!)
