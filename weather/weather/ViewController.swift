@@ -16,13 +16,12 @@ class ViewController: UIViewController {
     @IBOutlet weak var stateAbbreviationInput: UITextField!
     @IBOutlet weak var cityNameInput: UITextField!
     @IBOutlet weak var celsiusToggle: UISwitch!
-    @IBAction func toggleTemperature(_ sender: Any) {
-    }
+    
     @IBOutlet weak var celsiusLabel: UILabel!
     
     @IBOutlet weak var weatherIcon: UIImageView!
     var weatherWearService: WeatherService = WundergroundWeatherService()
-    
+    var forecast: WeatherForecast?
     @IBAction func GetWeather(_ sender: Any) {
         
         // TODO: validate the user input; we can do this after we add more to the UI...
@@ -38,6 +37,7 @@ class ViewController: UIViewController {
                 // Deal with error here
                 return
             } else if let weatherForecast = weatherForecast {
+               self.forecast = weatherForecast
                 self.currentWeatherLabel.text = weatherForecast.forecast?.txt_forecast?.forecastday?[0].fcttext
                 if self.celsiusToggle.isOn {
                     self.currentTemperatureLabel.text = weatherForecast.forecast?.simpleforecast?.forecastday?[0].high?.celsius
@@ -56,10 +56,26 @@ class ViewController: UIViewController {
             }
             else {
                 // Deal with no error, no forecast!
-                
             }
+            self.cityLabel.text = "\(self.cityNameInput.text!), \(self.stateAbbreviationInput.text!)"
         }
     }
+    @IBAction func toggleTemperature(_ sender: Any) {
+        if let forecast = forecast {
+            if celsiusToggle.isOn {
+                currentTemperatureLabel.text = "\(forecast.forecast?.simpleforecast?.forecastday?[0].high?.celsius!), °C"
+                celsiusLabel.text = "Celsius"
+                
+            }
+            else {
+                currentTemperatureLabel.text = "\(forecast.forecast?.simpleforecast?.forecastday?[0].high?.fahrenheit!), °F!"
+                celsiusLabel.text = "Fahrenheit"
+                }
+            }
+        }
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         cityLabel.text = "St. Charles, IL"
