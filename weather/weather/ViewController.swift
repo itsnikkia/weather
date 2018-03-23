@@ -63,12 +63,12 @@ class ViewController: UIViewController {
     @IBAction func toggleTemperature(_ sender: Any) {
         if let forecast = forecast {
             if celsiusToggle.isOn {
-                currentTemperatureLabel.text = "\(forecast.forecast?.simpleforecast?.forecastday?[0].high?.celsius!), °C"
+                currentTemperatureLabel.text = "\(forecast.forecast!.simpleforecast!.forecastday![0].high!.celsius!) °C"
                 celsiusLabel.text = "Celsius"
                 
             }
             else {
-                currentTemperatureLabel.text = "\(forecast.forecast?.simpleforecast?.forecastday?[0].high?.fahrenheit!), °F!"
+                currentTemperatureLabel.text = "\(forecast.forecast!.simpleforecast!.forecastday![0].high!.fahrenheit!)°F"
                 celsiusLabel.text = "Fahrenheit"
                 }
             }
