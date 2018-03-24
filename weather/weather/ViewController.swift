@@ -60,6 +60,18 @@ class ViewController: UIViewController {
             self.cityLabel.text = "\(self.cityNameInput.text!), \(self.stateAbbreviationInput.text!)"
         }
     }
+    @IBOutlet var ClothingItem: UIView!
+    // Call the Clothing Item API
+    weatherWearService.getClothes(shirt, pants, jacket, shoes) { (weatherForecast, error) in
+    if error != nil {
+    // Deal with error here
+    return
+    } else if let weatherForecast = weatherForecast {
+    self.forecast = weatherForecast
+    self.currentWeatherLabel.text = weatherForecast.forecast?.txt_forecast?.forecastday?[0].fcttext
+    }
+    }
+    
     @IBAction func toggleTemperature(_ sender: Any) {
         if let forecast = forecast {
             if celsiusToggle.isOn {
